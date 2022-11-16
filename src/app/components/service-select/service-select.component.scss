@@ -1,0 +1,99 @@
+@import '../../../assets/styles/variable';
+@import '../../../assets/styles/mixins';
+
+$card-desktop: 32.8rem;
+$card-tablet: 40vw;
+
+.service-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: calc(100vh - #{$header-height});
+  padding: 0 calc((100% - (#{$card-desktop} * 2)) / 4);
+
+  @include response('tablet') {
+    padding: 0;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: $card-desktop;
+    height: $card-desktop;
+    padding: 2rem;
+    border: 3px solid $color-primary;
+    border-radius: 8px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all .5s;
+
+    @include response('tablet') {
+      width: $card-tablet;
+      height: $card-tablet;
+    }
+
+    @include response('phone') {
+      width: $card-tablet;
+      height: 60vw;
+    }
+  }
+
+  &__logo-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20.4rem;
+    height: 20.4rem;
+    border-radius: 50%;
+    background-color: $color-primary;
+    transition: all .5s;
+
+    @include response('tablet') {
+      width: 70%;
+      height: 70%;
+    }
+
+    @include response('phone') {
+      width: 28vw;
+      height: 28vw;
+    }
+  }
+
+  &__logo {
+    @include response('tablet') {
+      width: 50%;
+    }
+  }
+
+  &__text {
+    font-weight: 500;
+    letter-spacing: .32rem;
+    color: $color-primary;
+    transition: all .5s;
+
+    @include h5-font('lg');
+
+    @include response('tablet') {
+      @include h5-font('md');
+    }
+
+    @include response('phone') {
+      @include h5-font('sm');
+    }
+  }
+
+  &__card:hover {
+    background-color: $color-primary;
+  }
+
+  &__card:hover &__logo-box {
+    background-color: $color-white;
+  }
+
+  &__card:hover &__text {
+    color: $color-secondary;
+  }
+}

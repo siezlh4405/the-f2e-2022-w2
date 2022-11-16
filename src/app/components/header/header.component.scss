@@ -23,6 +23,10 @@
     right: 7.2rem;
     transform: translateY(-50%);
 
+    @include response('tablet') {
+      right: 5.2rem;
+    }
+
     @include response('phone') {
       right: 2.7rem;
     }

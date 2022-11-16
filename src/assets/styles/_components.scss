@@ -6,15 +6,27 @@
   height: 4.7rem;
   border-radius: 4px;
   background-color: $color-primary;
+  letter-spacing: .32rem;
   outline: none;
   border: none;
+  box-shadow: 0px 0px 4px $color-btn-shadow;
   font-weight: 400;
   font-family: inherit;
+  cursor: pointer;
 
-  @include button-font('md');
+  &:hover {
+    background-color: $color-btn-hover;
+  }
+
+  @include button-font('lg');
+
+  @include response('tablet') {
+    @include h5-font('md');
+  }
 
   @include response('phone') {
     width: 8rem;
     height: 3.3rem;
+    @include button-font('sm');
   }
 }
