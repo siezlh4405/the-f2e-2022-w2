@@ -1,0 +1,17 @@
+@import '../assets/styles/mixins';
+
+.body {
+  width: 100%;
+  height: 100vh;
+  background-image: url('../assets/images/bg-desktop.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  @include response('tablet') {
+    background-image: url('../assets/images/bg-tablet.png');
+  }
+
+  @include response('phone') {
+    background-image: url('../assets/images/bg-phone.png');
+  }
+}

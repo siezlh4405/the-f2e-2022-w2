@@ -1,0 +1,30 @@
+@import '../../../assets/styles/variable';
+@import '../../../assets/styles//mixins';
+
+.header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: $header-height;
+
+  &__logo {
+    width: 26.4rem;
+
+    @include response('phone') {
+      width: 21.4rem;
+    }
+  }
+
+  &__btn {
+    position: absolute;
+    top: 50%;
+    right: 7.2rem;
+    transform: translateY(-50%);
+
+    @include response('phone') {
+      right: 2.7rem;
+    }
+  }
+}

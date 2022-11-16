@@ -95,3 +95,15 @@
     font-size: 1.2rem;
   }
 }
+
+// RWD
+@mixin response ($breakpoint) {
+  @if $breakpoint == tablet {
+    @media only screen and (max-width: 48em) { @content; } // 768px
+  }
+
+  @if $breakpoint == phone {
+    @media only screen and (max-width: 36em) { @content; } // 576px
+  }
+
+}

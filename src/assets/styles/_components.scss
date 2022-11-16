@@ -1,0 +1,20 @@
+@import './variable';
+@import './mixins';
+
+.btn {
+  width: 15.4rem;
+  height: 4.7rem;
+  border-radius: 4px;
+  background-color: $color-primary;
+  outline: none;
+  border: none;
+  font-weight: 400;
+  font-family: inherit;
+
+  @include button-font('md');
+
+  @include response('phone') {
+    width: 8rem;
+    height: 3.3rem;
+  }
+}
