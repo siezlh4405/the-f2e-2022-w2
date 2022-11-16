@@ -1,0 +1,97 @@
+@mixin h1-font($size) {
+  @if $size == lg {
+    font-size: 4.8rem;
+  }
+
+  @if $size == md {
+    font-size: 3rem;
+  }
+
+  @if $size == sm {
+    font-size: 2rem;
+  }
+}
+
+@mixin h2-font($size) {
+  @if $size == lg {
+    font-size: 3.2rem;
+  }
+
+  @if $size == md {
+    font-size: 2.4rem;
+  }
+
+  @if $size == sm {
+    font-size: 2.4rem;
+  }
+}
+
+@mixin h3-font($size) {
+  @if $size == lg {
+    font-size: 2rem;
+  }
+
+  @if $size == md {
+    font-size: 1.6rem;
+  }
+
+  @if $size == sm {
+    font-size: 1.6rem;
+  }
+}
+
+@mixin h4-font($size) {
+  @if $size == lg {
+    font-size: 4.8rem;
+  }
+
+  @if $size == md {
+    font-size: 2.4rem;
+  }
+
+  @if $size == sm {
+    font-size: 2rem;
+  }
+}
+
+@mixin h5-font($size) {
+  @if $size == lg {
+    font-size: 2.4rem;
+  }
+
+  @if $size == md {
+    font-size: 2rem;
+  }
+
+  @if $size == sm {
+    font-size: 2rem;
+  }
+}
+
+@mixin button-font($size) {
+  @if $size == lg {
+    font-size: 2rem;
+  }
+
+  @if $size == md {
+    font-size: 1.6rem;
+  }
+
+  @if $size == sm {
+    font-size: 1.4rem;
+  }
+}
+
+@mixin caption-font($size) {
+  @if $size == lg {
+    font-size: 1.4rem;
+  }
+
+  @if $size == md {
+    font-size: 1.2rem;
+  }
+
+  @if $size == sm {
+    font-size: 1.2rem;
+  }
+}
