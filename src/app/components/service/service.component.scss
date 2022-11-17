@@ -1,8 +1,139 @@
 @import '../../../assets/styles/variable';
+@import '../../../assets/styles/mixins';
+@import '../../../assets/styles/components';
+
+$tab-height: 5rem;
 
 .container {
   width: 100%;
-  height: calc(100vh - $header-height);
+  height: calc(100vh - #{$header-height});
   padding: 0 $container-padding-desktop;
   padding-top: 4rem;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: $tab-height;
+
+  &__item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+    border-bottom: 1px solid $color-tab-gary-dark;
+    color: $color-tab-gary-light;
+    cursor: pointer;
+
+    &_active{
+      border-bottom: 1px solid $color-primary;
+      border-radius: 4px;
+      background-color: rgba($color-white, .15);
+    }
+  }
+
+  &__text {
+    font-weight: 500;
+    letter-spacing: .2em;
+    // color: $color-white;
+
+    @include h5-font('lg');
+
+    @include response('tablet') {
+      @include h5-font('md');
+    }
+
+    @include response('phone') {
+      @include h5-font('sm');
+    }
+  }
+
+
+  &__item:hover &__text{
+    opacity: .7;
+  }
+
+  &__item_active &__text{
+    color: $color-white;
+  }
+}
+
+.content {
+  width: 100%;
+  height: calc(100% - #{$tab-height});
+  padding: 9.5rem calc(20.27% - #{$container-padding-desktop});
+  padding-bottom: 0;
+
+  @media only screen and (max-width: 62.5em) {
+    padding: 9.5rem 0;
+  }
+
+  &__header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 6rem;
+    margin-bottom: 5rem;
+  }
+
+  &__title {
+    font-weight: 400;
+    font-size: 4rem;
+    letter-spacing: 0.065em;
+    color: $color-primary;
+
+    @include response('tablet') {
+      font-size: 3.2rem;
+    }
+
+    @include response('phone') {
+      font-size: 1.4rem;
+    }
+  }
+
+  &__title-btn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+
+    @include response('tablet') {
+      width: 11.4rem;
+    }
+  }
+
+  &__box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:not(:last-child) {
+      margin-bottom: 6.5rem;
+    }
+  }
+
+  &__sign {
+    flex: 1;
+    height: 10.3rem;
+    margin-right: 4rem;
+    border: 3px solid $color-primary-dark;
+    border-radius: 4px;
+    background-color: $color-white;
+  }
+
+  &__notice-text {
+    width: 100%;
+    font-size: 1.6rem;
+    letter-spacing: .2em;
+    text-align: center;
+    color: $color-white;
+
+    @include response('phone') {
+      font-size: 1.2rem;
+    }
+  }
 }

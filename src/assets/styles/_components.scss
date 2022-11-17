@@ -6,16 +6,46 @@
   height: 4.7rem;
   border-radius: 4px;
   background-color: $color-primary;
-  letter-spacing: .32rem;
+  letter-spacing: .2em;
   outline: none;
-  border: none;
+  border: 1px solid transparent;
   box-shadow: 0px 0px 4px $color-btn-shadow;
   font-weight: 400;
   font-family: inherit;
+  color: $color-secondary-dark;
   cursor: pointer;
+  transition: all .3s;
+
+  &_dark {
+    box-shadow: none;
+    background-color: $color-primary-hover;
+    color: $color-white;
+  }
+
+  &_transparent {
+    border: 1px solid $color-primary-hover;
+    box-shadow: none;
+    color: $color-primary-hover;
+    background-color: transparent;
+  }
+
+  &_dark-disabled {
+    background-color: $color-tab-gary-dark2;
+    pointer-events: none;
+    color: $color-tab-gary-dark3;
+  }
 
   &:hover {
     background-color: $color-btn-hover;
+  }
+
+  &_dark:hover {
+    background-color: rgba($color-primary-hover, .7);
+  }
+
+  &_transparent:hover {
+    background-color: rgba($color-primary-hover, .3);
+    color: $color-white;
   }
 
   @include button-font('lg');

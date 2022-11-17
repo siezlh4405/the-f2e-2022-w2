@@ -1,3 +1,25 @@
 <div class="container">
-
+  <div class="tab">
+    <div class="tab__item">
+      <p class="tab__text">簽屬文件</p>
+    </div>
+    <div class="tab__item" [class.tab__item_active]="true">
+      <p class="tab__text">建立簽名檔</p>
+    </div>
+  </div>
+  <div class="content">
+    <div class="content__header">
+      <p class="content__title">我的簽名檔</p>
+      <button class="btn btn_dark content__title-btn" [class.btn_dark-disabled]="isDisabled">新增</button>
+    </div>
+    <div class="content__box">
+      <div class="content__sign"></div>
+      <button class="btn btn_transparent">刪除</button>
+    </div>
+    <div class="content__box">
+      <div class="content__sign"></div>
+      <button class="btn btn_transparent">刪除</button>
+    </div>
+    <p *ngIf="isDisabled" class="content__notice-text">您的簽名檔已達兩則上限</p>
+  </div>
 </div>
