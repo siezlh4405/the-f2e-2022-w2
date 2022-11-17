@@ -1,0 +1,8 @@
+@import '../../../assets/styles/variable';
+
+.container {
+  width: 100%;
+  height: calc(100vh - $header-height);
+  padding: 0 $container-padding-desktop;
+  padding-top: 4rem;
+}

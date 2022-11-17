@@ -20,7 +20,7 @@
   &__btn {
     position: absolute;
     top: 50%;
-    right: 7.2rem;
+    right: $container-padding-desktop;
     transform: translateY(-50%);
 
     @include response('tablet') {
