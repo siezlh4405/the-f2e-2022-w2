@@ -4,13 +4,15 @@ import { HeaderComponent } from './header/header.component';
 import { ServiceSelectComponent } from './service-select/service-select.component';
 import { ServiceComponent } from './service/service.component';
 import { RouterModule } from '@angular/router';
+import { HistoryComponent } from './history/history.component';
 
 
 @NgModule({
   declarations: [
     HeaderComponent,
     ServiceSelectComponent,
-    ServiceComponent
+    ServiceComponent,
+    HistoryComponent
   ],
   imports: [
     CommonModule,
