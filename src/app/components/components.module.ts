@@ -5,6 +5,7 @@ import { ServiceSelectComponent } from './service-select/service-select.componen
 import { ServiceComponent } from './service/service.component';
 import { RouterModule } from '@angular/router';
 import { HistoryComponent } from './history/history.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { HistoryComponent } from './history/history.component';
   imports: [
     CommonModule,
     RouterModule,
+    PdfViewerModule
   ],
   exports: [
     HeaderComponent

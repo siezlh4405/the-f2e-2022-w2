@@ -60,7 +60,7 @@ $tab-height: 5rem;
   }
 }
 
-.content {
+.add-sign-content {
   width: 100%;
   height: calc(100% - #{$tab-height});
   padding: 9.5rem calc(20.27% - #{$container-padding-desktop});
@@ -135,5 +135,190 @@ $tab-height: 5rem;
     @include response('phone') {
       font-size: 1.2rem;
     }
+  }
+}
+
+.sign-text-content {
+  display: flex;
+  width: 100%;
+  height: calc(100% - #{$tab-height});
+  padding-top: 6.8rem;
+  padding-bottom: 4rem;
+
+  &__process-box {
+    flex: 0 1 45rem;
+  }
+
+  &__file-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1 0 70rem;
+    height: 100%;
+  }
+
+  &__upload {
+    width: 100%;
+    height: calc(100% - 7rem);
+    border: 1px solid $color-primary;
+    background-color: rgba($color-white, .95);
+  }
+
+  &__footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  &__upload-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 7rem;
+    padding: 1rem 0;
+    margin: 0 1rem;
+    border-bottom: 1px solid $color-black;
+  }
+
+  &__pdf {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: calc(100% - 7rem);
+  }
+
+  &__notice {
+    margin-right: 1.5rem;
+    color: $color-gray-dark2;
+    letter-spacing: .065em;
+    @include caption-font(lg);
+  }
+
+  &__notice-text {
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: $color-gray-light1;
+    @include caption-font(lg);
+  }
+}
+
+.process {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 25%;
+
+  &__line {
+    position: absolute;
+    right: calc(25% + 2.1rem);
+    width: 1px;
+    height: 100%;
+    background-color: $color-btn-shadow;
+    z-index: 100;
+  }
+
+  &__item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-weight: 500;
+    @include button-font(lg);
+  }
+
+  &__item_active &__text {
+    background-color: transparent;
+  }
+
+  &__item_active &__step {
+    color: $color-secondary;
+    background-color: $color-btn-shadow;
+  }
+
+  &__text {
+    margin-right: 1.6rem;
+    color: $color-white;
+    letter-spacing: 0.2em;
+  }
+
+  &__step {
+    position: relative;
+    width: 4.2rem;
+    height: 4.2rem;
+    border: 1px solid $color-btn-shadow;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 4.2rem;
+    color: $color-btn-shadow;
+    background-color: $color-gray-dark1;
+    z-index: 150;
+  }
+}
+
+.upload-input {
+  display: none;
+}
+
+.pdf-viewer {
+  width: 100%;
+  height: 100%;
+}
+
+.signature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: calc(100% - 7rem);
+  border: 1px solid $color-primary;
+  background-color: rgba($color-white, .95);
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 10rem;
+  }
+
+  &__title {
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    color: $color-gray-light1;
+    @include caption-font(lg);
+
+    &_href {
+      color: $color-secondary;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  &__canvas-container {
+    width: 80%;
+    height: calc(100% - 25rem);
+  }
+
+  &__canvas {
+    width: 100%;
+    height: 100%;
+    border: 1px solid $color-tab-gary-light;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 15rem;
+    padding: 0 36%;
   }
 }
