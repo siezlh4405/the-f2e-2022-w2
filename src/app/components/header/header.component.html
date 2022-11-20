@@ -1,5 +1,0 @@
-<header class="header">
-  <img class="header__logo" src="../../../assets/images/logo.png" alt="LOGO">
-  <button *ngIf="!isHistory" [routerLink]="['/history']" class="header__btn btn" (click)="isHistory = true">歷史文件</button>
-  <button *ngIf="isHistory" [routerLink]="['/']" (click)="isHistory = false" class="header__btn btn">回到首頁</button>
-</header>
