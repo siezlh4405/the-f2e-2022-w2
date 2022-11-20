@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { PDFDocumentProxy } from 'ng2-pdf-viewer';
-import { Observable, fromEvent } from 'rxjs';
+import { Observable, fromEvent, Subscription } from 'rxjs';
 import { map, takeUntil, concatAll, merge } from 'rxjs/operators';
 import { fabric } from "fabric";
 import { SignatureService } from 'src/app/services/signature.service';
@@ -10,7 +10,7 @@ import { SignatureService } from 'src/app/services/signature.service';
   templateUrl: './service-sign.component.html',
   styleUrls: ['./service-sign.component.scss']
 })
-export class ServiceSignComponent implements OnInit {
+export class ServiceSignComponent implements OnInit, AfterViewInit, OnDestroy {
   ctxPdf!: CanvasRenderingContext2D;
   ctxImg!: CanvasRenderingContext2D;
   ctxSign!: CanvasRenderingContext2D;
@@ -36,6 +36,10 @@ export class ServiceSignComponent implements OnInit {
   signImgUrl = '';
   isDrawSignCanvas = false;
   isPopupShow = false;
+  uploadError = false;
+
+  resizeSubscript: Subscription | undefined;
+  mouse1Subscript: Subscription | undefined;
 
   constructor(
     private elem: ElementRef,
@@ -44,9 +48,19 @@ export class ServiceSignComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  ngOnDestroy(): void {
+    if (this.resizeSubscript) {
+      this.resizeSubscript.unsubscribe();
+    }
+
+    if (this.mouse1Subscript) {
+      this.mouse1Subscript.unsubscribe();
+    }
+  }
+
   ngAfterViewInit(): void {
     // 網頁拖拉大小要調整簽名 CANVAS
-    this.resize$.subscribe(() => {
+    this.resizeSubscript = this.resize$.subscribe(() => {
       if (this.step === 2) {
         let temp = this.ctxSign.getImageData(0, 0, this.signCanvas.nativeElement.width, this.signCanvas.nativeElement.height);
         this.ctxSign.canvas.width = this.signCanvasContainer.nativeElement.offsetWidth;
@@ -74,7 +88,7 @@ export class ServiceSignComponent implements OnInit {
         this.ctxSign = this.signCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
       }
 
-      mouseDown$.pipe(map(donwEvent => {
+      this.mouse1Subscript = mouseDown$.pipe(map(donwEvent => {
         const mouseEvent = donwEvent as MouseEvent;
         const mousePosition = this.getMousePos(this.signCanvas.nativeElement, mouseEvent);
         this.ctxSign.beginPath();
@@ -116,8 +130,11 @@ export class ServiceSignComponent implements OnInit {
     this.pdfSrc = '';
     this.imgUrl = '';
     this.pdfUrl = '';
+    this.uploadError = false;
 
-    if (target.files !== null && target.files[0].type == 'application/pdf') {
+    target.files !== null ? console.log(target.files[0].size) : '';
+
+    if (target.files !== null && target.files[0].type == 'application/pdf' && target.files[0].size <= 10966423) {
       if (typeof (FileReader) !== 'undefined') {
         this.isPDF = true;
         this.isFileUploaded = true;
@@ -127,7 +144,7 @@ export class ServiceSignComponent implements OnInit {
         };
         reader.readAsArrayBuffer(target.files[0]);
       }
-    } else if (target.files !== null && target.files[0].type == 'image/png') {
+    } else if (target.files !== null && target.files[0].type == 'image/png' && target.files[0].size <= 10966423) {
       this.isIMG = true;
       this.isFileUploaded = true;
       let reader = new FileReader();
@@ -147,8 +164,8 @@ export class ServiceSignComponent implements OnInit {
           base_image.src = this.imgSrc;
         };
         reader.readAsDataURL(target.files[0]);
-    } else{
-      alert('Please upload correct file')
+    } else {
+      this.uploadError = true;
     }
   }
 
@@ -208,6 +225,7 @@ export class ServiceSignComponent implements OnInit {
     }
 
     if (this.step === 3) {
+      this.signautreService.saveUrl = this.margeCanvas.toDataURL();
       var link = document.createElement('a');
       link.download = 'sign.png';
       link.href = this.margeCanvas.toDataURL();

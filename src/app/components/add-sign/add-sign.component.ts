@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Observable, fromEvent } from 'rxjs';
+import { Observable, fromEvent, Subscription } from 'rxjs';
 import { map, takeUntil, concatAll, merge } from 'rxjs/operators';
 import { SignatureService } from 'src/app/services/signature.service';
 
@@ -16,6 +16,9 @@ export class AddSignComponent implements OnInit, AfterViewInit {
   @ViewChild('signCanvas2') signCanvas2!: ElementRef<HTMLCanvasElement>;
   @ViewChild('signCanvasContainer2') signCanvasContainer2!: ElementRef<HTMLCanvasElement>;
   resize$: Observable<Event> = fromEvent(window, 'resize');
+  resizeSubscript: Subscription | undefined;
+  mouse1Subscript: Subscription | undefined;
+  mouse2Subscript: Subscription | undefined;
 
   constructor(
     public signautreService: SignatureService
@@ -39,19 +42,31 @@ export class AddSignComponent implements OnInit, AfterViewInit {
       this.signautreService.isSign2Isset = false;
       this.signautreService.signatureUrl2 = '';
     }
+
+    if (this.resizeSubscript) {
+      this.resizeSubscript.unsubscribe();
+    }
+
+    if (this.mouse1Subscript) {
+      this.mouse1Subscript.unsubscribe();
+    }
+
+    if (this.mouse2Subscript) {
+      this.mouse2Subscript.unsubscribe();
+    }
   }
 
   ngAfterViewInit(): void {
     // 網頁拖拉大小要調整簽名 CANVAS
-    this.resize$.subscribe(() => {
-      if (true) {
+    this.resizeSubscript = this.resize$.subscribe(() => {
+      if (this.signautreService.isSign1Isset) {
         let temp = this.ctxSign1.getImageData(0, 0, this.signCanvas1.nativeElement.width, this.signCanvas1.nativeElement.height);
         this.ctxSign1.canvas.width = this.signCanvasContainer1.nativeElement.offsetWidth;
         this.ctxSign1.canvas.height = this.signCanvasContainer1.nativeElement.offsetHeight;
         this.ctxSign1.putImageData(temp, 0, 0);
       }
 
-      if (true) {
+      if (this.signautreService.isSign2Isset) {
         let temp = this.ctxSign2.getImageData(0, 0, this.signCanvas2.nativeElement.width, this.signCanvas2.nativeElement.height);
         this.ctxSign2.canvas.width = this.signCanvasContainer2.nativeElement.offsetWidth;
         this.ctxSign2.canvas.height = this.signCanvasContainer2.nativeElement.offsetHeight;
@@ -73,7 +88,7 @@ export class AddSignComponent implements OnInit, AfterViewInit {
         this.ctxSign1 = this.signCanvas1.nativeElement.getContext('2d') as CanvasRenderingContext2D;
       }
 
-      mouseDown$.pipe(map(donwEvent => {
+      this.mouse1Subscript = mouseDown$.pipe(map(donwEvent => {
         const mouseEvent = donwEvent as MouseEvent;
         const mousePosition = this.getMousePos(this.signCanvas1.nativeElement, mouseEvent);
         this.ctxSign1.beginPath();
@@ -109,7 +124,7 @@ export class AddSignComponent implements OnInit, AfterViewInit {
         this.ctxSign2 = this.signCanvas2.nativeElement.getContext('2d') as CanvasRenderingContext2D;
       }
 
-      mouseDown$.pipe(map(donwEvent => {
+      this.mouse2Subscript = mouseDown$.pipe(map(donwEvent => {
         const mouseEvent = donwEvent as MouseEvent;
         const mousePosition = this.getMousePos(this.signCanvas2.nativeElement, mouseEvent);
         this.ctxSign2.beginPath();

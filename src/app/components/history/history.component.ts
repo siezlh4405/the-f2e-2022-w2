@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SignatureService } from 'src/app/services/signature.service';
 
 @Component({
   selector: 'app-history',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HistoryComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public signautreService: SignatureService
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  download(url: string): void {
+    var link = document.createElement('a');
+    link.download = 'sign.png';
+    link.href = url;
+    link.click();
   }
 
 }

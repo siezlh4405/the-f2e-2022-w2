@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SignatureService } from 'src/app/services/signature.service';
 
 @Component({
   selector: 'app-service-select',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ServiceSelectComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public signautreService: SignatureService
+  ) { }
 
   ngOnInit(): void {
   }

@@ -20,6 +20,11 @@
     justify-content: space-between;
     flex: 1 0 70rem;
     height: 100%;
+
+    @media only screen and (max-width: 56.875em) {
+      flex: none;
+      width: 90%;
+    }
   }
 
   &__upload {
@@ -67,6 +72,37 @@
     letter-spacing: 0.1em;
     color: $color-gray-light1;
     @include caption-font(lg);
+
+    &_red {
+      color: $color-red;
+    }
+  }
+
+  &__error {
+    position: relative;
+    width: 3.4rem;
+    height: 3.4rem;
+    margin-right: .8rem;
+    border: 1px solid $color-red;
+    background-color: transparent;
+    border-radius: 50%;
+  }
+
+  &__error-line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2rem;
+    height: .1rem;
+    background-color: $color-red;
+
+    &:nth-child(1) {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    &:nth-child(2) {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
   }
 }
 
@@ -79,6 +115,10 @@
   width: 100%;
   height: 100%;
   padding: 0 25%;
+
+  @media only screen and (max-width: 75em) {
+    padding-left: 0;
+  }
 
   &__line {
     position: absolute;
@@ -111,10 +151,16 @@
     margin-right: 1.6rem;
     color: $color-white;
     letter-spacing: 0.2em;
+
+    @include response(phone) {
+      display: none;
+    }
   }
 
   &__step {
     position: relative;
+    min-width: 4.2rem;
+    min-height: 4.2rem;
     width: 4.2rem;
     height: 4.2rem;
     border: 1px solid $color-btn-shadow;
@@ -180,11 +226,14 @@
 
   &__footer {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     width: 100%;
     height: 15rem;
-    padding: 0 36%;
+  }
+
+  &__btn-margin {
+    margin-right: 5rem;
   }
 }
 
@@ -226,6 +275,14 @@
   border-radius: 5px;
   z-index: 480;
 
+  @include response(phone) {
+    padding: 8.4rem 2rem;
+  }
+
+  @media only screen and (max-width: 62.5em) {
+    padding: 8.4rem 2rem;
+  }
+
   &__title {
     margin-bottom: 6rem;
     font-weight: 400;
@@ -233,6 +290,14 @@
     letter-spacing: 0.065em;
     color: $color-secondary;
     text-align: center;
+
+    @include response(tablet) {
+      font-size: 2.4rem;
+    }
+
+    @include response(phone) {
+      font-size: 1.8rem;
+    }
   }
 
   &__item {
@@ -251,6 +316,14 @@
     border: 3px solid $color-primary;
     border-radius: 5px;
     margin-right: 4rem;
+
+    @media only screen and (max-width: 62.5em) {
+      height: 7rem;
+    }
+
+    @include response(phone) {
+      height: 4rem;
+    }
   }
 
   &__img {

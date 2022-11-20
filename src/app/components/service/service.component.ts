@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SignatureService } from 'src/app/services/signature.service';
 
 @Component({
   selector: 'app-service',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ServiceComponent implements OnInit {
   tab = 'sign';
-  constructor() { }
+  constructor(
+    public signautreService: SignatureService
+  ) {
+    this.tab = signautreService.work;
+  }
 
   ngOnInit(): void {}
 }

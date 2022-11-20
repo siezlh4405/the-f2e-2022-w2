@@ -31,7 +31,14 @@
       <div class="sign-text-content__pdf" #imgCanvasContainer>
         <pdf-viewer *ngIf="isFileUploaded && isPDF" class="pdf-viewer" [src]="pdfSrc" [render-text]="false" [page]="currentpage"  [show-all]="false" [original-size]="true" [fit-to-page]="false" (after-load-complete)="afterLoadComplete($event)" (page-rendered)="pageRendered($event)"></pdf-viewer>
         <canvas class="canvas-viewer" #imgCanvas [hidden]="!(isFileUploaded && isIMG)"></canvas>
-        <p *ngIf="!isFileUploaded" class="sign-text-content__notice-text">文件顯示區</p>
+        <p *ngIf="!isFileUploaded && !uploadError" class="sign-text-content__notice-text">文件顯示區</p>
+        <ng-container *ngIf="uploadError">
+          <div class="sign-text-content__error">
+            <div class="sign-text-content__error-line"></div>
+            <div class="sign-text-content__error-line"></div>
+          </div>
+          <p class="sign-text-content__notice-text sign-text-content__notice-text_red">您的檔案超過 10 MB 或 格式不支援</p>
+        </ng-container>
       </div>
     </div>
     <div class="signature" [hidden]="!(step === 2)">
@@ -44,7 +51,7 @@
         <canvas class="signature__canvas" #signCanvas></canvas>
       </div>
       <div class="signature__footer">
-        <button class="btn btn_transparent" (click)="resetSignCanvas()">清除</button>
+        <button class="btn btn_transparent signature__btn-margin" (click)="resetSignCanvas()">清除</button>
         <button class="btn btn_dark" (click)="saveSignCanvas()">儲存</button>
       </div>
     </div>
