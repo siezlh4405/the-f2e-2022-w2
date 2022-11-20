@@ -38,14 +38,14 @@
       <div class="signature__header">
         <p class="signature__title">請在此寫下您的簽名</p>
         <p class="signature__title">或</p>
-        <a class="signature__title signature__title_href" (click)="selectSignature()">從簽名檔中選取簽名</a>
+        <a class="signature__title signature__title_href" (click)="setIsPopupShow(true)">從簽名檔中選取簽名</a>
       </div>
       <div class="signature__canvas-container" #signCanvasContainer>
         <canvas class="signature__canvas" #signCanvas></canvas>
       </div>
       <div class="signature__footer">
-        <button class="btn btn_transparent" (click)="resetCanvas()">清除</button>
-        <button class="btn btn_dark" (click)="saveCanvas()">儲存</button>
+        <button class="btn btn_transparent" (click)="resetSignCanvas()">清除</button>
+        <button class="btn btn_dark" (click)="saveSignCanvas()">儲存</button>
       </div>
     </div>
     <div class="marge" *ngIf="step === 3" #mergeContainer>
@@ -57,6 +57,28 @@
         <ng-container *ngIf="step !== 3; else downloadTmp">下一步</ng-container>
         <ng-template #downloadTmp>下載</ng-template>
       </button>
+    </div>
+  </div>
+</div>
+
+<div class="signature-pop-box" *ngIf="isPopupShow">
+  <div class="signature-pop">
+    <p class="signature-pop__title">我的簽名檔</p>
+    <div class="signature-pop__item" *ngIf="signautreService.isSign1Isset">
+      <div class="signature-pop__img-box">
+        <img class="signature-pop__img" [src]="signautreService.signatureUrl1">
+      </div>
+      <button class="btn btn_transparent" (click)="selectSignature(1)">選擇</button>
+    </div>
+    <div class="signature-pop__item" *ngIf="signautreService.isSign2Isset">
+      <div class="signature-pop__img-box">
+        <img class="signature-pop__img" [src]="signautreService.signatureUrl2">
+      </div>
+      <button class="btn btn_transparent" (click)="selectSignature(2)">選擇</button>
+    </div>
+    <div class="signature-pop__close-box" (click)="setIsPopupShow(false)">
+      <i class="signature-pop__close"></i>
+      <i class="signature-pop__close"></i>
     </div>
   </div>
 </div>

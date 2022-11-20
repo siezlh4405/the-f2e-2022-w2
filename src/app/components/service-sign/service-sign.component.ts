@@ -34,7 +34,8 @@ export class ServiceSignComponent implements OnInit {
   imgUrl = '';
   step = 1;
   signImgUrl = '';
-  isSign = false;
+  isDrawSignCanvas = false;
+  isPopupShow = false;
 
   constructor(
     private elem: ElementRef,
@@ -92,7 +93,8 @@ export class ServiceSignComponent implements OnInit {
         this.ctxSign.shadowColor = 'black';// 邊緣顏色
         this.ctxSign.lineTo(mousePosition.x, mousePosition.y);
         this.ctxSign.stroke();
-        this.isSign = true;
+        this.isDrawSignCanvas = true;
+        this.signImgUrl = '';
       });
     }
   }
@@ -175,15 +177,15 @@ export class ServiceSignComponent implements OnInit {
     };
   }
 
-  resetCanvas(): void {
+  resetSignCanvas(): void {
     this.ctxSign.canvas.width = this.signCanvasContainer.nativeElement.offsetWidth;
     this.ctxSign.canvas.height = this.signCanvasContainer.nativeElement.offsetHeight;
     this.signImgUrl = '';
-    this.isSign = false;
+    this.isDrawSignCanvas = false;
   }
 
-  saveCanvas(): void {
-    if (!this.isSign) {
+  saveSignCanvas(): void {
+    if (!this.isDrawSignCanvas) {
       alert('請先簽屬簽名在儲存');
       return;
     }
@@ -221,6 +223,8 @@ export class ServiceSignComponent implements OnInit {
         this.ctxSign.canvas.width = this.signCanvasContainer.nativeElement.offsetWidth;
         this.ctxSign.canvas.height = this.signCanvasContainer.nativeElement.offsetHeight;
       }, 0);
+
+      this.isStep2HasSign();
     }
 
     if (this.step === 3) {
@@ -262,19 +266,44 @@ export class ServiceSignComponent implements OnInit {
       setTimeout(() => {
         this.ctxSign.canvas.width = this.signCanvasContainer.nativeElement.offsetWidth;
         this.ctxSign.canvas.height = this.signCanvasContainer.nativeElement.offsetHeight;
+        this.isStep2HasSign();
       }, 0);
     }
   }
 
-  // 待移除
-  selectSignature(): void {
+  // 控制選擇簽名檔彈窗是否開啟
+  setIsPopupShow(status: boolean): void {
+    this.isPopupShow = status;
+  }
+
+  // 選擇簽名檔
+  selectSignature(num: number): void {
+    this.resetSignCanvas();
     const base_image = new Image();
     base_image.onload = () => {
       this.ctxSign.drawImage(base_image , 0, 0);
+      this.setIsPopupShow(false);
+      this.signImgUrl = this.ctxSign.canvas.toDataURL();
+      this.isDrawSignCanvas = true;
     };
-    base_image.src = this.signautreService.signatureUrl1;
+    base_image.src = num === 1 ? this.signautreService.signatureUrl1 : this.signautreService.signatureUrl2;
   }
 
+  // 判斷是否有簽名檔
+  isStep2HasSign(): void {
+    if (this.signImgUrl !== '') {
+      const base_image = new Image();
+      base_image.onload = () => {
+        this.ctxSign.drawImage(base_image , 0, 0);
+        this.setIsPopupShow(false);
+        this.signImgUrl = this.ctxSign.canvas.toDataURL();
+        this.isDrawSignCanvas = true;
+      };
+      base_image.src = this.signImgUrl;
+    }
+  }
+
+  // 待移除
   test() {
     var link = document.createElement('a'); // create an anchor tag
 

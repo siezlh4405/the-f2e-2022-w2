@@ -3,6 +3,7 @@
 @import '../../../assets/styles/components';
 
 .sign-text-content {
+  position: relative;
   display: flex;
   width: 100%;
   height: calc(100% - #{$tab-height});
@@ -199,5 +200,91 @@
   &__canvas {
     width: 100%;
     height: 100%;
+  }
+}
+
+.signature-pop-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba($color-black, .6);
+  z-index: 500;
+}
+
+.signature-pop {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 75%;
+  height: 58.7rem;
+  padding: 8.4rem 11.1rem;
+  border: 5px solid $color-primary;
+  background-color: $color-white;
+  border-radius: 5px;
+  z-index: 480;
+
+  &__title {
+    margin-bottom: 6rem;
+    font-weight: 400;
+    font-size: 4rem;
+    letter-spacing: 0.065em;
+    color: $color-secondary;
+    text-align: center;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:not(:last-child) {
+      margin-bottom: 6.5rem;
+    }
+  }
+
+  &__img-box {
+    width: 60%;
+    height: 10.3rem;
+    border: 3px solid $color-primary;
+    border-radius: 5px;
+    margin-right: 4rem;
+  }
+
+  &__img {
+    width: 100%;
+  }
+
+  &__close-box {
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    width: 5rem;
+    height: 5rem;
+    cursor: pointer;
+  }
+
+  &__close-box:hover &__close {
+    opacity: .7;
+  }
+
+  &__close {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: inline-block;
+    width: 3rem;
+    height: 2px;
+    background-color: $color-tab-gary-light;
+
+    &:nth-child(1) {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    &:nth-child(2) {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
   }
 }

@@ -92,7 +92,7 @@ export class AddSignComponent implements OnInit, AfterViewInit {
         this.ctxSign1.shadowColor = 'black';// 邊緣顏色
         this.ctxSign1.lineTo(mousePosition.x, mousePosition.y);
         this.ctxSign1.stroke();
-        this.saveCanvas(1);
+        this.saveSignCanvas(1);
       });
     }
 
@@ -128,7 +128,7 @@ export class AddSignComponent implements OnInit, AfterViewInit {
         this.ctxSign2.shadowColor = 'black';// 邊緣顏色
         this.ctxSign2.lineTo(mousePosition.x, mousePosition.y);
         this.ctxSign2.stroke();
-        this.saveCanvas(2);
+        this.saveSignCanvas(2);
       });
     }
 
@@ -199,7 +199,7 @@ export class AddSignComponent implements OnInit, AfterViewInit {
     };
   }
 
-  saveCanvas(num: number): void {
+  saveSignCanvas(num: number): void {
     if (num === 1) {
       this.signautreService.signatureUrl1 = this.ctxSign1.canvas.toDataURL();
     }
