@@ -18,6 +18,8 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
+    "@types/fabric": "^4.5.12",
+    "fabric": "^5.2.4",
     "ng2-pdf-viewer": "^9.1.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",

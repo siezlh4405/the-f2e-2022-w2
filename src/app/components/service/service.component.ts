@@ -1,7 +1,8 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PDFDocumentProxy } from 'ng2-pdf-viewer';
 import { fromEvent, Observable } from 'rxjs';
 import { map, takeUntil, concatAll, merge } from 'rxjs/operators';
+import { fabric } from 'fabric';
 
 @Component({
   selector: 'app-service',
@@ -9,9 +10,12 @@ import { map, takeUntil, concatAll, merge } from 'rxjs/operators';
   styleUrls: ['./service.component.scss']
 })
 export class ServiceComponent implements OnInit {
-  ctx!: CanvasRenderingContext2D;
+  ctxPdf!: CanvasRenderingContext2D;
+  ctxSign!: CanvasRenderingContext2D;
   @ViewChild('signCanvas') signCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('signCanvasContainer') signCanvasContainer!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('mergeContainer') mergeContainer!: ElementRef<HTMLCanvasElement>;
+  margeCanvas!:fabric.Canvas;
   resize$: Observable<Event> = fromEvent(window, 'resize');
   // scroll$!: Observable<Event>;
   isDisabled = true;
@@ -19,26 +23,28 @@ export class ServiceComponent implements OnInit {
   isPdfUploaded = false;
   currentpage = 0;
   totalPages = 1;
-  url = '';
-  step = 2;
+  pdfUrl = '';
+  step = 1;
+  signImgUrl = '';
 
   constructor(
-    private renderer: Renderer2,
     private elem: ElementRef
   ) { }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
+    // 網頁拖拉大小要調整簽名 CANVAS
     this.resize$.subscribe(() => {
-      let temp = this.ctx.getImageData(0, 0, this.signCanvas.nativeElement.width, this.signCanvas.nativeElement.height);
-      this.ctx.canvas.width = this.signCanvasContainer.nativeElement.offsetWidth;
-      this.ctx.canvas.height = this.signCanvasContainer.nativeElement.offsetHeight;
-      this.ctx.putImageData(temp, 0, 0);
+      if (this.step === 2) {
+        let temp = this.ctxSign.getImageData(0, 0, this.signCanvas.nativeElement.width, this.signCanvas.nativeElement.height);
+        this.ctxSign.canvas.width = this.signCanvasContainer.nativeElement.offsetWidth;
+        this.ctxSign.canvas.height = this.signCanvasContainer.nativeElement.offsetHeight;
+        this.ctxSign.putImageData(temp, 0, 0);
+      }
     });
 
+    // SIGN CANVAS EVENT
     if (this.signCanvas !== undefined) {
       const mouseDown$ = fromEvent(this.signCanvas.nativeElement, 'mousedown');
       const mouseMove$ = fromEvent(this.signCanvas.nativeElement, 'mousemove');
@@ -49,14 +55,14 @@ export class ServiceComponent implements OnInit {
       this.signCanvas.nativeElement.height = this.signCanvasContainer.nativeElement.offsetHeight;
 
       if (this.signCanvas.nativeElement !== undefined) {
-        this.ctx = this.signCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+        this.ctxSign = this.signCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
       }
 
       mouseDown$.pipe(map(donwEvent => {
         const mouseEvent = donwEvent as MouseEvent;
         const mousePosition = this.getMousePos(this.signCanvas.nativeElement, mouseEvent);
-        this.ctx.beginPath();
-        this.ctx.moveTo(mousePosition.x, mousePosition.y);
+        this.ctxSign.beginPath();
+        this.ctxSign.moveTo(mousePosition.x, mousePosition.y);
         donwEvent.preventDefault();
         return mouseMove$.pipe(takeUntil(mouseUp$.pipe(merge(mouseOut$))))
       }))
@@ -64,22 +70,17 @@ export class ServiceComponent implements OnInit {
       .subscribe(event=> {
         const mouseEvent = event as MouseEvent;
         const mousePosition = this.getMousePos(this.signCanvas.nativeElement, mouseEvent);
-        this.ctx.lineCap = 'round';
-        this.ctx.lineWidth = 2;
-        this.ctx.lineJoin='round';
-        this.ctx.shadowBlur = 1; // 邊緣模糊，防止直線邊緣出現鋸齒
-        this.ctx.shadowColor = 'black';// 邊緣顏色
-        this.ctx.lineTo(mousePosition.x, mousePosition.y);
-        this.ctx.stroke();
-        console.log(mousePosition.x);
+        this.ctxSign.lineCap = 'round';
+        this.ctxSign.lineWidth = 2;
+        this.ctxSign.lineJoin='round';
+        this.ctxSign.shadowBlur = 1; // 邊緣模糊，防止直線邊緣出現鋸齒
+        this.ctxSign.shadowColor = 'black';// 邊緣顏色
+        this.ctxSign.lineTo(mousePosition.x, mousePosition.y);
+        this.ctxSign.stroke();
+        this.saveCanvas();
       });
     }
   }
-
-
-  // testPageChange($event: any): void {
-  //   console.log($event);
-  // }
 
   resetUploadFile($e: Event): void {
     const target = $e.target as HTMLInputElement;
@@ -91,7 +92,6 @@ export class ServiceComponent implements OnInit {
    */
   uploadFile($e: Event): void {
     const target = $e.target as HTMLInputElement;
-    console.log(target.files);
     this.isPdfUploaded  = false;
 
     if (target.files !== null && target.files[0].type == 'application/pdf'){
@@ -99,8 +99,6 @@ export class ServiceComponent implements OnInit {
         let reader = new FileReader();
         reader.onload = (e: any) => {
           this.pdfSrc = e.target.result;
-          console.log(this.pdfSrc);
-
         };
         this.isPdfUploaded = true;
         reader.readAsArrayBuffer(target.files[0]);
@@ -110,35 +108,138 @@ export class ServiceComponent implements OnInit {
     }
   }
 
-  afterLoadComplete(pdf: PDFDocumentProxy) {
+  // pdf load complete
+  afterLoadComplete(pdf: PDFDocumentProxy): void {
     this.totalPages = pdf.numPages;
-    console.log(pdf);
   }
 
-  // e: CustomEvent
-  pageRendered(e: any) {
-    console.log('(page-rendered)', e.source);
+  // pdf page change
+  pageChange($event: any): void {
+    console.log($event);
+  }
 
+  // pdf page render, e: CustomEvent
+  pageRendered(e: any): void {
     const canvasWrapper = this.elem.nativeElement.querySelectorAll('.canvasWrapper canvas')[0];
-    this.ctx = canvasWrapper.getContext('2d');
-    this.ctx.strokeRect(0, 0, 100, 100);
-    console.log(canvasWrapper.toDataURL());
-    this.url = canvasWrapper.toDataURL();
+    this.pdfUrl = canvasWrapper.toDataURL();
+  }
+
+  // 上傳如果是 img 的處理
+  uploadImg(): void {
+    let canvasWrapper = this.elem.nativeElement.querySelectorAll('.canvasWrapper canvas')[0];  // imgage canvas
     const base_image = new Image();
     base_image.src = '../../../assets/images/bg-tablet.png';
     setTimeout(() => {
-      this.ctx.drawImage(base_image , 0, 0, base_image.width, base_image.height, 0, 0, canvasWrapper.width, canvasWrapper.height);
-      console.log(123);
-      this.url = canvasWrapper.toDataURL();
+      this.ctxPdf.drawImage(base_image , 0, 0, base_image.width, base_image.height, 0, 0, canvasWrapper.width, canvasWrapper.height);
+      this.pdfUrl = canvasWrapper.toDataURL();
+    }, 1000);
+  }
 
-    }, 5000);
+  // SIGN CANVAS
+  getMousePos(canvas: HTMLCanvasElement, evt: MouseEvent): { x: number, y: number } {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
+  }
+
+  resetCanvas(): void {
+    this.ctxSign.canvas.width = this.signCanvasContainer.nativeElement.offsetWidth;
+    this.ctxSign.canvas.height = this.signCanvasContainer.nativeElement.offsetHeight;
+    this.signImgUrl = '';
+  }
+
+  saveCanvas(): void {
+    this.signImgUrl = this.ctxSign.canvas.toDataURL();
+  }
+
+  // 下一步
+  next(): void {
+    if (this.step === 1 && this.pdfUrl === '') {
+      alert('請先上傳檔案');
+      return;
+    }
+
+    if (this.step === 2 && this.signImgUrl === '') {
+      alert('請先簽屬簽名或是選擇簽名檔');
+      return;
+    }
+
+    if (this.step === 3) {
+      var link = document.createElement('a');
+      link.download = 'sign.png';
+      link.href = this.margeCanvas.toDataURL();
+      link.click();
+
+      return;
+    }
+
+    this.step += 1;
+
+    if (this.step === 2) {
+      setTimeout(() => {
+        this.ctxSign.canvas.width = this.signCanvasContainer.nativeElement.offsetWidth;
+        this.ctxSign.canvas.height = this.signCanvasContainer.nativeElement.offsetHeight;
+      }, 0);
+    }
+
+    if (this.step === 3) {
+      setTimeout(() => {
+        this.margeCanvas = new fabric.Canvas('margeCanvas');
+
+        fabric.Image.fromURL(this.pdfUrl , (img) => {
+          setTimeout(() => {
+            this.margeCanvas.setWidth(img.width as number);
+            this.margeCanvas.setHeight(img.height as number);
+            this.margeCanvas.renderAll();
+
+            this.margeCanvas.setBackgroundImage(img, this.margeCanvas.renderAll.bind(this.margeCanvas));
+            // img.scaleToWidth(100);
+            // img.scaleToHeight(100);
+
+            fabric.Image.fromURL(this.signImgUrl, (signImg) => {
+              signImg.scaleToWidth(50);
+              signImg.scaleToHeight(50);
+              this.margeCanvas.add(signImg).renderAll();
+            });
+          }, 0);
+        });
+      }, 0);
+
+    }
+  }
+
+  // 上一步
+  back(): void {
+    if (this.step === 1) {
+      return;
+    }
+
+    this.step -= 1;
+
+    if (this.step === 2) {
+      setTimeout(() => {
+        this.ctxSign.canvas.width = this.signCanvasContainer.nativeElement.offsetWidth;
+        this.ctxSign.canvas.height = this.signCanvasContainer.nativeElement.offsetHeight;
+      }, 0);
+    }
+  }
+
+  // 待移除
+  te(): void {
+    const base_image = new Image();
+    base_image.onload = () => {
+      this.ctxSign.drawImage(base_image , 0, 0);
+    };
+    base_image.src = this.signImgUrl;
   }
 
   test() {
     var link = document.createElement('a'); // create an anchor tag
 
     // set parameters for downloading
-    link.setAttribute('href', this.url);
+    link.setAttribute('href', this.pdfUrl);
     link.setAttribute('target', '_blank');
     link.setAttribute('download', 'test.png');
 
@@ -151,15 +252,5 @@ export class ServiceComponent implements OnInit {
         link.click();
     }
   }
-
-  // CANVAS
-  getMousePos(canvas: HTMLCanvasElement, evt: MouseEvent): { x: number, y: number } {
-    var rect = canvas.getBoundingClientRect();
-    console.log(rect);
-
-    return {
-      x: evt.clientX - rect.left,
-      y: evt.clientY - rect.top
-    };
-  }
 }
+

@@ -258,6 +258,7 @@ $tab-height: 5rem;
     color: $color-btn-shadow;
     background-color: $color-gray-dark1;
     z-index: 150;
+    transition: all .4s;
   }
 }
 
@@ -271,9 +272,6 @@ $tab-height: 5rem;
 }
 
 .signature {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
   height: calc(100% - 7rem);
   border: 1px solid $color-primary;
@@ -305,6 +303,7 @@ $tab-height: 5rem;
   &__canvas-container {
     width: 80%;
     height: calc(100% - 25rem);
+    margin: 0 auto;
   }
 
   &__canvas {
@@ -320,5 +319,20 @@ $tab-height: 5rem;
     width: 100%;
     height: 15rem;
     padding: 0 36%;
+  }
+}
+
+.marge {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: calc(100% - 7rem);
+  border: 1px solid $color-primary;
+  background-color: rgba($color-white, .95);
+  overflow: auto;
+
+  &__canvas {
+    width: 100%;
+    height: 100%;
   }
 }

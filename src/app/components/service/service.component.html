@@ -14,11 +14,11 @@
           <p class="process__text">上傳文件</p>
           <p class="process__step">1</p>
         </div>
-        <div class="process__item">
+        <div class="process__item" [class.process__item_active]="step > 1">
           <p class="process__text">選擇簽名檔</p>
           <p class="process__step">2</p>
         </div>
-        <div class="process__item">
+        <div class="process__item" [class.process__item_active]="step > 2">
           <p class="process__text">位移與尺寸</p>
           <p class="process__step">3</p>
         </div>
@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="sign-text-content__file-box">
-      <div class="sign-text-content__upload" [hidden]="step !== 1">
+      <div class="sign-text-content__upload" [hidden]="!(step === 1)">
         <div class="sign-text-content__upload-header">
           <div class="sign-text-content__notice">
             <ul>
@@ -44,23 +44,29 @@
           </ng-template>
         </div>
       </div>
-      <div class="signature" [hidden]="step !== 2">
+      <div class="signature" [hidden]="!(step === 2)">
         <div class="signature__header">
           <p class="signature__title">請在此寫下您的簽名</p>
           <p class="signature__title">或</p>
-          <a class="signature__title signature__title_href">從簽名檔中選取簽名</a>
+          <a class="signature__title signature__title_href" (click)="te()">從簽名檔中選取簽名</a>
         </div>
         <div class="signature__canvas-container" #signCanvasContainer>
           <canvas class="signature__canvas" #signCanvas></canvas>
         </div>
         <div class="signature__footer">
-          <button class="btn btn_transparent">清除</button>
-          <button class="btn btn_dark">儲存</button>
+          <button class="btn btn_transparent" (click)="resetCanvas()">清除</button>
+          <button class="btn btn_dark" (click)="saveCanvas()">儲存</button>
         </div>
       </div>
+      <div class="marge" *ngIf="step === 3" #mergeContainer>
+        <canvas class="marge__canvas" id="margeCanvas"></canvas>
+      </div>
       <div class="sign-text-content__footer">
-        <button class="btn btn_step btn_step-transparent btn_dark-disabled">上一步</button>
-        <button class="btn btn_step">下一步</button>
+        <button class="btn btn_step btn_step-transparent" [class.btn_dark-disabled]="false" (click)="back()">上一步</button>
+        <button class="btn btn_step" (click)="next()">
+          <ng-container *ngIf="step !== 3; else downloadTmp">下一步</ng-container>
+          <ng-template #downloadTmp>下載</ng-template>
+        </button>
       </div>
     </div>
   </div>
