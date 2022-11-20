@@ -6,6 +6,8 @@ import { ServiceComponent } from './service/service.component';
 import { RouterModule } from '@angular/router';
 import { HistoryComponent } from './history/history.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { ServiceSignComponent } from './service-sign/service-sign.component';
+import { AddSignComponent } from './add-sign/add-sign.component';
 
 
 @NgModule({
@@ -13,7 +15,9 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     HeaderComponent,
     ServiceSelectComponent,
     ServiceComponent,
-    HistoryComponent
+    HistoryComponent,
+    ServiceSignComponent,
+    AddSignComponent
   ],
   imports: [
     CommonModule,

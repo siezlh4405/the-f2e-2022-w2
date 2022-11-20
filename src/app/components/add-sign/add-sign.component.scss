@@ -1,0 +1,88 @@
+@import '../../../assets/styles/variable';
+@import '../../../assets/styles/mixins';
+@import '../../../assets/styles/components';
+
+.add-sign-content {
+  width: 100%;
+  height: calc(100% - #{$tab-height});
+  padding: 9.5rem calc(20.27% - #{$container-padding-desktop});
+  padding-bottom: 0;
+
+  @media only screen and (max-width: 62.5em) {
+    padding: 9.5rem 0;
+  }
+
+  &__header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 6rem;
+    margin-bottom: 5rem;
+  }
+
+  &__title {
+    font-weight: 400;
+    font-size: 4rem;
+    letter-spacing: 0.065em;
+    color: $color-primary;
+
+    @include response('tablet') {
+      font-size: 3.2rem;
+    }
+
+    @include response('phone') {
+      font-size: 1.4rem;
+    }
+  }
+
+  &__title-btn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+
+    @include response('tablet') {
+      width: 11.4rem;
+    }
+  }
+
+  &__container {
+    &:not(:last-child) {
+      margin-bottom: 6.5rem;
+    }
+  }
+
+  &__box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__sign {
+    flex: 1;
+    height: 10.3rem;
+    margin-right: 4rem;
+    border: 3px solid $color-primary-dark;
+    border-radius: 4px;
+    background-color: $color-white;
+  }
+
+  &__notice-text {
+    width: 100%;
+    font-size: 1.6rem;
+    letter-spacing: .2em;
+    text-align: center;
+    color: $color-white;
+
+    @include response('phone') {
+      font-size: 1.2rem;
+    }
+  }
+
+  &__canvas {
+    width: 100%;
+    height: 100%;
+  }
+}

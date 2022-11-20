@@ -1,88 +1,12 @@
 <div class="container">
   <div class="tab">
-    <div class="tab__item">
+    <div class="tab__item" [class.tab__item_active]="tab === 'sign'" (click)="tab = 'sign'">
       <p class="tab__text">簽屬文件</p>
     </div>
-    <div class="tab__item" [class.tab__item_active]="true">
+    <div class="tab__item" [class.tab__item_active]="tab === 'add sign'" (click)="tab = 'add sign'">
       <p class="tab__text">建立簽名檔</p>
     </div>
   </div>
-  <div class="sign-text-content">
-    <div class="sign-text-content__process-box">
-      <div class="process">
-        <div class="process__item process__item_active">
-          <p class="process__text">上傳文件</p>
-          <p class="process__step">1</p>
-        </div>
-        <div class="process__item" [class.process__item_active]="step > 1">
-          <p class="process__text">選擇簽名檔</p>
-          <p class="process__step">2</p>
-        </div>
-        <div class="process__item" [class.process__item_active]="step > 2">
-          <p class="process__text">位移與尺寸</p>
-          <p class="process__step">3</p>
-        </div>
-        <i class="process__line"></i>
-      </div>
-    </div>
-    <div class="sign-text-content__file-box">
-      <div class="sign-text-content__upload" [hidden]="!(step === 1)">
-        <div class="sign-text-content__upload-header">
-          <div class="sign-text-content__notice">
-            <ul>
-              <li>檔案格式需為 PDF 或 IMG</li>
-              <li> 檔案大小上限為 10MB</li>
-            </ul>
-          </div>
-          <label for="upload-doc" class="btn btn_dark btn_label"><p>上傳文件</p></label>
-          <input class="upload-input" type="file" id="upload-doc" accept=".pdf" (click)="resetUploadFile($event)" (change)="uploadFile($event)">
-        </div>
-        <div class="sign-text-content__pdf">
-          <pdf-viewer *ngIf="isPdfUploaded;else notUploadLoad" class="pdf-viewer" [src]="pdfSrc" [render-text]="false" [page]="currentpage"  [show-all]="false" [original-size]="true" [fit-to-page]="false" (after-load-complete)="afterLoadComplete($event)" (page-rendered)="pageRendered($event)"></pdf-viewer>
-          <ng-template #notUploadLoad>
-            <p class="sign-text-content__notice-text">文件顯示區</p>
-          </ng-template>
-        </div>
-      </div>
-      <div class="signature" [hidden]="!(step === 2)">
-        <div class="signature__header">
-          <p class="signature__title">請在此寫下您的簽名</p>
-          <p class="signature__title">或</p>
-          <a class="signature__title signature__title_href" (click)="te()">從簽名檔中選取簽名</a>
-        </div>
-        <div class="signature__canvas-container" #signCanvasContainer>
-          <canvas class="signature__canvas" #signCanvas></canvas>
-        </div>
-        <div class="signature__footer">
-          <button class="btn btn_transparent" (click)="resetCanvas()">清除</button>
-          <button class="btn btn_dark" (click)="saveCanvas()">儲存</button>
-        </div>
-      </div>
-      <div class="marge" *ngIf="step === 3" #mergeContainer>
-        <canvas class="marge__canvas" id="margeCanvas"></canvas>
-      </div>
-      <div class="sign-text-content__footer">
-        <button class="btn btn_step btn_step-transparent" [class.btn_dark-disabled]="false" (click)="back()">上一步</button>
-        <button class="btn btn_step" (click)="next()">
-          <ng-container *ngIf="step !== 3; else downloadTmp">下一步</ng-container>
-          <ng-template #downloadTmp>下載</ng-template>
-        </button>
-      </div>
-    </div>
-  </div>
-  <div class="add-sign-content" *ngIf="false">
-    <div class="add-sign-content__header">
-      <p class="add-sign-content__title">我的簽名檔</p>
-      <button class="btn btn_dark add-sign-content__title-btn" [class.btn_dark-disabled]="isDisabled">新增</button>
-    </div>
-    <div class="add-sign-content__box">
-      <div class="add-sign-content__sign"></div>
-      <button class="btn btn_transparent">刪除</button>
-    </div>
-    <div class="add-sign-content__box">
-      <div class="add-sign-content__sign"></div>
-      <button class="btn btn_transparent">刪除</button>
-    </div>
-    <p *ngIf="isDisabled" class="add-sign-content__notice-text">您的簽名檔已達兩則上限</p>
-  </div>
+  <app-service-sign *ngIf="tab === 'sign'"></app-service-sign>
+  <app-add-sign *ngIf="tab === 'add sign'"></app-add-sign>
 </div>
